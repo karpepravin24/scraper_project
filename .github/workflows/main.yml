@@ -29,4 +29,4 @@ jobs:
           pip install lxml==4.8.0
           
       - name: Run Scraper
-        run: python tradingview_scrapper.py
+        run: python /home/runner/work/tradingview_scraper_project/tradingview_scrapper.py
