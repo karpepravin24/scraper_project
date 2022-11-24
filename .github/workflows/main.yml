@@ -4,18 +4,26 @@ name: run tradingview_Scraper.py
 on:
   schedule:
     - cron: '0 * * * *' # Every hour at 00
+  workflow_dispatch:
+  
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-  build:
+  scrape-latest:
     runs-on: ubuntu-latest
+
     steps:
-    
-      - name: setup python
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9' # install the python version needed
+          python-version: '3.9'
+      - name: Install requirements
+        run: 
+          python pip install --upgrade pip
+          pip install -r requirements.txt
           
-      - name: execute py script # run main.py
-        env:
-          api_token: ${{ secrets.TELEGRAM_API_TOKEN }}
-        run: python tradingview_scraper.py
+      - name: Run Scraper
+        run: python tradingview_scrapper.py
