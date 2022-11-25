@@ -5,6 +5,9 @@
 
 schedules:
 - cron: "44 * * * *" # Every hour at 44 minute
+  branches:
+    include:
+    - master
 
 pool:
   vmImage: ubuntu-latest
