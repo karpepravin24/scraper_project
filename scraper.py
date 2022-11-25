@@ -64,7 +64,7 @@ def scrape_tradingview():
 
 
 def send_to_telegram(df):
-    api_token = '5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc'
+    api_token = os.environ.get('TELEGRAM_API_TOKEN')
     chat_id = '@test_channel_bot24'
     api_url = f'https://api.telegram.org/bot{api_token}/sendPhoto'
 
