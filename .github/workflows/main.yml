@@ -24,4 +24,4 @@ jobs:
       - run : pip install -r requirements.txt
           
       - name: Run Scraper
-        run: python /home/runner/work/tradingview_scraper_project/tradingview_scrapper.py
+        run: python /home/runner/work/tradingview_scraper_project/tradingview_scraper.py
