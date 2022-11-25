@@ -3,7 +3,8 @@ name: run tradingview Scraper
 
 on:
   schedule:
-    - cron: '44 * * * *' # Every hour at 44 minute
+    - cron: "44 * * * *" # Every hour at 44 minute
+  workflow_dispatch:
   
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
