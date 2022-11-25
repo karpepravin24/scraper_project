@@ -1,5 +1,5 @@
 
-name: run tradingview_Scraper.py
+name: run tradingview Scraper
 
 on:
   schedule:
