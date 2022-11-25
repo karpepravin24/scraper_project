@@ -3,7 +3,7 @@ name: run tradingview Scraper
 
 on:
   schedule:
-    - cron: '0 * * * *' # Every hour at 00
+    - cron: '0 */1 * * *' # Every hour at 00
   workflow_dispatch:
   
 env:
