@@ -20,13 +20,8 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Install requirements
-        run: 
-          python -m pip install --upgrade pip
-          pip install pandas==1.4.2
-          pip install beautifulsoup4==4.11.1
-          pip install requests==2.27.1
-          pip install lxml==4.8.0
+          cache: 'pip' # caching pip dependencies
+      - run : pip install -r requirements.txt
           
       - name: Run Scraper
         run: python /home/runner/work/tradingview_scraper_project/tradingview_scrapper.py
