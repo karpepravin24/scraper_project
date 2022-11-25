@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 schedules:
-- cron: '44 * * * *' # Every hour at 44 minute
+- cron: "44 * * * *" # Every hour at 44 minute
 
 pool:
   vmImage: ubuntu-latest
