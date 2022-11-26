@@ -23,5 +23,9 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run : pip install -r requirements.txt
           
+      - name: Hello world action
+        with: # Set the secret as an input
+          api_token: ${{ secrets.TELEGRAM_API_TOKEN }}
+      
       - name: Run Scraper
         run: python scraper.py
