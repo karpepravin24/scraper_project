@@ -81,7 +81,7 @@ def send_to_telegram(df):
             \nAuthor View: {df['tag'][i]}
             \n{'*'*30}\nDescription:\n\n{df['description'][i]}
             \n\n{'*'*30}\nAuthor  :  {df['author_name'][i]}
-            \nPosted  :  {posted}\n{'-'*50}
+            \n{'-'*50}
             """
             image_link = df['image_link'][i]
     
