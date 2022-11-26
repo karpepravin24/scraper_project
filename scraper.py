@@ -11,7 +11,7 @@ current_time = datetime.datetime.now()
 
 
 # Scraping function
-def scrape_traingview():
+def scrape_tradingview():
     values_list = []
     url         = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
     curr_time   = time.time()
