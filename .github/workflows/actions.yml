@@ -24,6 +24,7 @@ jobs:
       - run : pip install -r requirements.txt
           
       - name: Getting API key from secrets
+        uses: actions/checkout@v1
         with: # Set the secret as an input
           api_token: ${{ secrets.TELEGRAM_API_TOKEN }}
       
