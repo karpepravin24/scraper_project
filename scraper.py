@@ -72,16 +72,13 @@ def send_to_telegram(df):
     api_url   = f'https://api.telegram.org/bot{api_token}/sendPhoto'
     
     if len(df) > 0:
-        for i in range(len(df)-1,-1,-1):
-            posted = datetime.datetime.fromtimestamp(int(df['post_epoch_time'][i])).strftime("%d %b %Y -- %I:%M")
-            
+        for i in range(len(df)-1,-1,-1):            
             description = f"""\n\n{df['stock_name'][i]}
             \n{'*'*30}\n{df['title'][i]}
             \nTimeframe  : {df['timeframe'][i]}
             \nAuthor View: {df['tag'][i]}
             \n{'*'*30}\nDescription:\n\n{df['description'][i]}
-            \n\n{'*'*30}\nAuthor  :  {df['author_name'][i]}
-            \n{'-'*50}
+            \n\n{'*'*30}\nAuthor  :  {df['author_name'][i]}\n{'-'*50}
             """
             image_link = df['image_link'][i]
     
