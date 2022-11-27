@@ -6,9 +6,6 @@ import datetime
 import pytz
 import json
 
-# Get current date & time
-current_time = datetime.datetime.now()
-
 
 def get_last_run_value(json_filepath):
     """This function gets the last workflow run value"""
