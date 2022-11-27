@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import time
 import datetime
+import pytz
 
 # Get current date & time
 current_time = datetime.datetime.now()
@@ -67,9 +68,11 @@ def scrape_tradingview():
 
 def send_to_telegram(df):
 
-    api_token = '5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc'
-    chat_id   = '@test_channel_bot24'
-    api_url   = f'https://api.telegram.org/bot{api_token}/sendPhoto'
+    IST          = pytz.timezone('Asia/Kolkata')
+    datetime_ist = datetime.datetime.now(IST).strftime('%d-%b-%Y  %H:%M')
+    api_token    = '5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc'
+    chat_id      = '@test_channel_bot24'
+    api_url      = f'https://api.telegram.org/bot{api_token}/sendPhoto'
     
     if len(df) > 0:
         for i in range(len(df)-1,-1,-1):            
@@ -85,9 +88,9 @@ def send_to_telegram(df):
             # sending row data to telegram
             requests.post(api_url, json={'chat_id': chat_id,'caption' : description, 'photo':image_link})
             
-        print("Messages posted successfully in Telegram Channel: ", current_time)
+        print("Messages posted successfully in Telegram Channel: ", datetime_ist)
     else:
-        print("No any Idea posted in last 1 Hour : ",current_time)
+        print("No any Idea posted in last 1 Hour : ", datetime_ist)
 
 
 if __name__ == '__main__':
