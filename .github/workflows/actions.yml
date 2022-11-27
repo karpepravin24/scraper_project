@@ -27,11 +27,11 @@ jobs:
         run: python scraper.py
         
       - name: Commit files  
-        run:
-          git config --global user.name 'karpepravin24'
-          git config --global user.email "karpepravin24@gmail.com"
-        
-          git add last_run_value.json
-          git commit -am "JSON file modified"
-          git push -f origin main
+        run: |
+          git config --global user.name 'Pravin'
+          git config --global user.email 'karpepravin24@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout "${GITHUB_REF:11}"
+          git commit -am "Auto commit JSON file"
+          git push
           
