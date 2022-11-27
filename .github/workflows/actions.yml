@@ -26,11 +26,12 @@ jobs:
       - name: Run Scraper
         run: python scraper.py
         
-      - name: Commit and push changes
+      - name: Commit files  
         run:
-          git config --global user.name "karpepravin24"
-          git config --global user.email "karpepravin24@gmail.com"
-
-          git add -A
-          git commit -m "Edited by Github Actions"
-          git push
+          git config --local user.name actions-user
+          git config --local user.email "actions@github.com"
+          if ! git diff --exit-code; then
+              git add last_run_value.json
+              git commit -am "GH Action Files added $(date)"
+              git push -f origin main
+          fi
