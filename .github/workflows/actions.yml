@@ -1,5 +1,5 @@
 
-name: run tradingview Scraper
+name: Run Scraper
 
 on:
   schedule:
