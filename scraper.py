@@ -65,6 +65,7 @@ def scrape_tradingview(cut_off):
     df = pd.DataFrame(values_list,
                       columns=['stock_name', 'image_link', 'title', 'timeframe', 'author_name', 'post_epoch_time',
                                'tag', 'description'])
+    df.drop_duplicates(inplace=True)
 
     return df
 
