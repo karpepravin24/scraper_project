@@ -25,6 +25,9 @@ jobs:
           pip install -r requirements.txt
                 
       - name: Run Scraper
+        env:
+            API_TOKEN : ${{secrets.API_TOKEN}}
+            CHAT_ID : ${{secrets.CHAT_ID}}
         run: python scraper.py
         
       - name: Commit files  
