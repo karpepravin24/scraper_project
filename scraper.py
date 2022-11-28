@@ -13,10 +13,10 @@ def get_last_run_value(json_filepath):
     with open(json_filepath) as f:
         last_run_value = json.load(f)
 
-    return list(last_run_value.values())
+    return tuple(tuple(last_run_value.values())[0])
 
 
-def scrape_tradingview(cut_off):
+def scrape_tradingview(last_values):
     values_list = []
     url = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
 
@@ -53,7 +53,7 @@ def scrape_tradingview(cut_off):
                 tag = 'Not Mentioned By Author'
 
             row = [stock_name, image_link, title, timeframe, author_name, post_epoch_time, tag, description]
-            if row == cut_off or len(values_list) == 18:
+            if row in last_values or len(values_list) == 18:
                 flag = False
                 break
             else:
@@ -90,21 +90,21 @@ def send_to_telegram(df):
 
             requests.post(api_url, json={'chat_id': chat_id, 'caption': description, 'photo': image_link})
 
-        print("Messages posted successfully in Telegram Channel: ", datetime_ist)
+        print(f"{len(df} Messages posted successfully in Telegram Channel: ", datetime_ist)
         return True
     else:
         print("No any Idea posted since last run : ", datetime_ist)
         return False
 
 
-def dump_latest_run_value(json_filepath, value):
+def dump_latest_run_value(json_filepath, dataframe):
     with open(json_filepath, 'w') as f:
-        json.dump(value, f)
+        json.dump({'last_run_values':dataframe.values.tolist()},f)
 
 
 if __name__ == '__main__':
     
-    last_run_value = get_last_run_value(json_filepath='last_run_value.json')
-    df = scrape_tradingview(cut_off=last_run_value)
+    last_run_values = get_last_run_value(json_filepath='last_run_value.json')
+    df = scrape_tradingview(last_values=last_run_values)
     if send_to_telegram(df):
-        dump_latest_run_value(json_filepath='last_run_value.json', value=df.iloc[0].to_dict())
+        dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
