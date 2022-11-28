@@ -53,7 +53,7 @@ def scrape_tradingview(cut_off):
                 tag = 'Not Mentioned By Author'
 
             row = [stock_name, image_link, title, timeframe, author_name, post_epoch_time, tag, description]
-            if row == cut_off:
+            if row == cut_off or len(values_list) == 18:
                 flag = False
                 break
             else:
