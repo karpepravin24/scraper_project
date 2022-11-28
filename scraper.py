@@ -5,6 +5,7 @@ import pandas as pd
 import datetime
 import pytz
 import json
+import os
 
 
 def get_last_run_value(json_filepath):
@@ -15,7 +16,6 @@ def get_last_run_value(json_filepath):
     return list(last_run_value.values())
 
 
-# Scraping function
 def scrape_tradingview(cut_off):
     values_list = []
     url = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
@@ -73,8 +73,9 @@ def scrape_tradingview(cut_off):
 def send_to_telegram(df):
     ist          = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.datetime.now(ist).strftime('%d-%b-%Y  %H:%M')
-    chat_id      = '@test_channel_bot24'
-    api_url      = f'https://api.telegram.org/bot5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc/sendPhoto'
+    chat_id      = os.environ['CHAT_ID']
+    api_token    = os.environ['API_TOKEN']
+    api_url      = f'https://api.telegram.org/bot{api_token}/sendPhoto'
 
     if len(df) > 0:
         for i in range(len(df) - 1, -1, -1):
@@ -87,7 +88,6 @@ def send_to_telegram(df):
             """
             image_link = df['image_link'][i]
 
-            # sending row data to telegram
             requests.post(api_url, json={'chat_id': chat_id, 'caption': description, 'photo': image_link})
 
         print("Messages posted successfully in Telegram Channel: ", datetime_ist)
@@ -103,7 +103,7 @@ def dump_latest_run_value(json_filepath, value):
 
 
 if __name__ == '__main__':
-    # Run the scraper
+    
     last_run_value = get_last_run_value(json_filepath='last_run_value.json')
     df = scrape_tradingview(cut_off=last_run_value)
     if send_to_telegram(df):
