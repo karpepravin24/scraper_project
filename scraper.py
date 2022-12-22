@@ -98,10 +98,10 @@ def send_to_telegram(df):
 
             requests.post(api_url, json={'chat_id': chat_id, 'caption': description, 'photo': image_link})
             
-            return f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}"
+            print(f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}")
 
     if len(df) == 0:
-        return f"No any Idea posted since last run :   {datetime_ist}"
+        print(f"No any Idea posted since last run :   {datetime_ist}")
         
     elif len(df) > 8:
         # getting followers
