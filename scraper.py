@@ -98,7 +98,7 @@ def send_to_telegram(df):
 
             requests.post(api_url, json={'chat_id': chat_id, 'caption': description, 'photo': image_link})
             
-            print(f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}")
+        print(f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}")
 
     if len(df) == 0:
         print(f"No any Idea posted since last run :   {datetime_ist}")
@@ -112,7 +112,7 @@ def send_to_telegram(df):
         new_df.reset_index(inplace = True, drop=True)
         
         # sending data
-        send_data(new_df)
+        send_data(new_df.iloc[0:8])
         
     else:
         send_data(df)
