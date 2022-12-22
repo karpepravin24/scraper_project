@@ -11,16 +11,18 @@ import os
 def get_last_run_value(json_filepath):
     """This function gets the last workflow run value"""
     with open(json_filepath) as f:
-        last_run_value = json.load(f)
+        last_run_values_dict = json.load(f)
+        last_run_values      = tuple(tuple(last_run_values_dict.values())[0])
+        last_run_epoch       = last_run_values[0][5]
+        
+        return last_run_values,last_run_epoch
 
-    return tuple(tuple(last_run_value.values())[0])
 
-
-def scrape_tradingview(last_values):
+def scrape_tradingview(last_run_values, last_run_epoch):
     values_list = []
     url = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
 
-    i = 1
+    i += 1
     flag = True
 
     while flag:
@@ -53,7 +55,7 @@ def scrape_tradingview(last_values):
                 tag = 'Not Mentioned By Author'
 
             row = [stock_name, image_link, title, timeframe, author_name, post_epoch_time, tag, description]
-            if row in last_values or len(values_list) == 18:
+            if (row in last_run_values) or (post_epoch_time <= last_run_epoch):
                 flag = False
                 break
             else:
@@ -73,11 +75,17 @@ def scrape_tradingview(last_values):
 def send_to_telegram(df):
     ist          = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.datetime.now(ist).strftime('%d-%b-%Y  %H:%M')
-    chat_id      = os.environ['CHAT_ID']
-    api_token    = os.environ['API_TOKEN']
+    chat_id      = '@test_channel_bot24'
+    api_token    = '5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc'
     api_url      = f'https://api.telegram.org/bot{api_token}/sendPhoto'
-
-    if len(df) > 0:
+    
+    def get_followers_count(author_name):
+        author_page      = requests.get(f"https://in.tradingview.com/u/{author_name}/")
+        soup             = BeautifulSoup(author_page.text,'lxml')
+        followers        = soup.find_all('span','tv-profile__social-item-value')[-1].text.strip()
+        return int(followers)
+    
+    def send_data(df):
         for i in range(len(df) - 1, -1, -1):
             description = f"""\n\n{df['stock_name'][i]}
             \n{'*' * 30}\n{df['title'][i]}
@@ -89,12 +97,25 @@ def send_to_telegram(df):
             image_link = df['image_link'][i]
 
             requests.post(api_url, json={'chat_id': chat_id, 'caption': description, 'photo': image_link})
+            
+            return f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}"
 
-        print(f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}")
-        return True
+    if len(df) == 0:
+        f"No any Idea posted since last run :   {datetime_ist}")
+        
+    elif len(df) > 8:
+        # getting followers
+        df['count_followers'] = df['author_name'].apply(get_followers_count)
+        
+        # sorting as per followers in descending order & reset index
+        df.sort_values(by = ['count_followers','post_epoch_time'], ascending = [False, True], inplace=True)
+        df.reset_index(inplace = True, drop=True)
+        
+        # sending data
+        send_data(df)
+        
     else:
-        print(f"No any Idea posted since last run :   {datetime_ist}")
-        return False
+        send_data(df)
 
 
 def dump_latest_run_value(json_filepath, dataframe):
@@ -103,8 +124,7 @@ def dump_latest_run_value(json_filepath, dataframe):
 
 
 if __name__ == '__main__':
-    
-    last_run_values = get_last_run_value(json_filepath='last_run_value.json')
-    df = scrape_tradingview(last_values=last_run_values)
-    if send_to_telegram(df):
-        dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
+    last_run_values, last_run_epoch = get_last_run_value(json_filepath='last_run_value.json')
+    df = scrape_tradingview(last_run_values = last_run_values, last_run_epoch = last_run_epoch)
+    send_to_telegram(df):
+    dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
