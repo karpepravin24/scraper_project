@@ -22,7 +22,7 @@ def scrape_tradingview(last_run_values, last_run_epoch):
     values_list = []
     url = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
 
-    i += 1
+    i = 1
     flag = True
 
     while flag:
