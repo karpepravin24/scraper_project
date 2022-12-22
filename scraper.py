@@ -75,8 +75,8 @@ def scrape_tradingview(last_run_values, last_run_epoch):
 def send_to_telegram(df):
     ist          = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.datetime.now(ist).strftime('%d-%b-%Y  %H:%M')
-    chat_id      = '@test_channel_bot24'
-    api_token    = '5800902618:AAEiZQ26G_4YUbS9eHafJohhZID3fsCEYLc'
+    chat_id      = os.environ['CHAT_ID']
+    api_token    = os.environ['API_TOKEN']
     api_url      = f'https://api.telegram.org/bot{api_token}/sendPhoto'
     
     def get_followers_count(author_name):
