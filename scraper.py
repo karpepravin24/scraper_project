@@ -12,13 +12,12 @@ def get_last_run_value(json_filepath):
     """This function gets the last workflow run value"""
     with open(json_filepath) as f:
         last_run_values_dict = json.load(f)
-        last_run_values      = tuple(tuple(last_run_values_dict.values())[0])
-        last_run_epoch       = last_run_values[0][5]
+        last_run_epoch       = last_run_values_dict["last_run_epoch"]
         
-        return last_run_values,last_run_epoch
+        return last_run_epoch
 
 
-def scrape_tradingview(last_run_values, last_run_epoch):
+def scrape_tradingview(cutoff_epoch):
     values_list = []
     url = 'https://in.tradingview.com/markets/stocks-india/ideas/?sort=recent'
 
@@ -55,7 +54,7 @@ def scrape_tradingview(last_run_values, last_run_epoch):
                 tag = 'Not Mentioned By Author'
 
             row = [stock_name, image_link, title, timeframe, author_name, post_epoch_time, tag, description]
-            if (row in last_run_values) or (post_epoch_time <= last_run_epoch):
+            if post_epoch_time <= cutoff_epoch:
                 flag = False
                 break
             else:
@@ -70,7 +69,6 @@ def scrape_tradingview(last_run_values, last_run_epoch):
     df.drop_duplicates(inplace=True)
 
     return df
-
 
 def send_to_telegram(df):
     ist          = pytz.timezone('Asia/Kolkata')
@@ -120,11 +118,13 @@ def send_to_telegram(df):
 
 def dump_latest_run_value(json_filepath, dataframe):
     with open(json_filepath, 'w') as f:
-        json.dump({'last_run_values':dataframe.values.tolist()},f)
+        json.dump({'last_run_epoch':dataframe.iloc[0,5]},f)
 
 
 if __name__ == '__main__':
-    last_run_values, last_run_epoch = get_last_run_value(json_filepath='last_run_value.json')
-    df = scrape_tradingview(last_run_values = last_run_values, last_run_epoch = last_run_epoch)
+    cutoff_epoch = get_last_run_value(json_filepath='last_run_value.json')
+    df = scrape_tradingview(cutoff_epoch=cutoff_epoch)
+    if len(df) > 0:
+        dump_latest_run_value(json_filepath='last_run_value.json',dataframe=df)
     send_to_telegram(df)
     dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
