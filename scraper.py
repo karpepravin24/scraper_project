@@ -101,7 +101,7 @@ def send_to_telegram(df):
             return f"{len(df)} Messages posted successfully in Telegram Channel at:   {datetime_ist}"
 
     if len(df) == 0:
-        f"No any Idea posted since last run :   {datetime_ist}")
+        return f"No any Idea posted since last run :   {datetime_ist}"
         
     elif len(df) > 8:
         # getting followers
