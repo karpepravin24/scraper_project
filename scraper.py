@@ -127,4 +127,3 @@ if __name__ == '__main__':
     if len(df) > 0:
         dump_latest_run_value(json_filepath='last_run_value.json',dataframe=df)
     send_to_telegram(df)
-    dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
