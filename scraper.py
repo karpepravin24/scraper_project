@@ -108,11 +108,11 @@ def send_to_telegram(df):
         df['count_followers'] = df['author_name'].apply(get_followers_count)
         
         # sorting as per followers in descending order & reset index
-        df.sort_values(by = ['count_followers','post_epoch_time'], ascending = [False, True], inplace=True)
-        df.reset_index(inplace = True, drop=True)
+        new_df = df.sort_values(by = ['count_followers','post_epoch_time'], ascending = [False, True])
+        new_df.reset_index(inplace = True, drop=True)
         
         # sending data
-        send_data(df)
+        send_data(new_df)
         
     else:
         send_data(df)
