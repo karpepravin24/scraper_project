@@ -126,5 +126,5 @@ def dump_latest_run_value(json_filepath, dataframe):
 if __name__ == '__main__':
     last_run_values, last_run_epoch = get_last_run_value(json_filepath='last_run_value.json')
     df = scrape_tradingview(last_run_values = last_run_values, last_run_epoch = last_run_epoch)
-    send_to_telegram(df):
+    send_to_telegram(df)
     dump_latest_run_value(json_filepath='last_run_value.json', dataframe=df)
