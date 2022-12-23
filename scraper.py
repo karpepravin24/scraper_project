@@ -6,6 +6,8 @@ import datetime
 import pytz
 import json
 import os
+import time
+import random
 
 
 def get_last_run_value(json_filepath):
@@ -62,6 +64,7 @@ def scrape_tradingview(cutoff_epoch):
 
         i += 1
         url = f'https://in.tradingview.com/markets/stocks-india/ideas/page-{str(i)}/?sort=recent'
+        time.sleep(random.randint(1,4))
 
     df = pd.DataFrame(values_list,
                       columns=['stock_name', 'image_link', 'title', 'timeframe', 'author_name', 'post_epoch_time',
@@ -81,6 +84,7 @@ def send_to_telegram(df):
         author_page      = requests.get(f"https://in.tradingview.com/u/{author_name}/")
         soup             = BeautifulSoup(author_page.text,'lxml')
         followers        = soup.find_all('span','tv-profile__social-item-value')[-1].text.strip()
+        time.sleep(random.randint(1,4))
         return int(followers)
     
     def send_data(df):
@@ -106,7 +110,8 @@ def send_to_telegram(df):
         df['count_followers'] = df['author_name'].apply(get_followers_count)
         
         # sorting as per followers in descending order & reset index
-        new_df = df.sort_values(by = ['count_followers','post_epoch_time'], ascending = [False, True])
+        new_df = df.sort_values(by = 'count_followers', ascending = False)
+        new_df.sort_values(by = 'post_epoch_time', ascending = False, inplace = True)
         new_df.reset_index(inplace = True, drop=True)
         
         # sending data
