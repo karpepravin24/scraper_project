@@ -27,7 +27,8 @@ def scrape_tradingview(cutoff_epoch):
     flag = True
 
     while flag:
-        page = requests.get(url)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
+        page = requests.get(url, headers = headers)
         soup = BeautifulSoup(page.text, 'lxml')
         boxes = soup.find_all('div', class_='tv-widget-idea js-userlink-popup-anchor')
 
@@ -47,7 +48,7 @@ def scrape_tradingview(cutoff_epoch):
             post_epoch_time = float(author_box.find_all('span')[-1].get('data-timestamp'))
 
             try:
-                tag = box.find('span', class_='content-TRXznVu1 badge-idea-content-fWzOPd3k').text.strip()
+                tag = box.find('span', class_='content-PlSmolIm badge-idea-content-ZleujXqe').text.strip()
                 if tag == 'Long':
                     tag = '\U0001F7E2'  # Green circle
                 if tag == 'Short':
